@@ -15,16 +15,17 @@ export default function DrawPoster({ src, title, index, backdrop_path }: CardPro
       <motion.div className="rounded-xl">
         <div className="mx-auto w-full max-w-[1200px]  rounded-xl px-4 py-5">
           <div className="relative overflow-hidden rounded-xl shadow-lg">
-            <img
-              alt="Carousel Movie Poster"
+            <DrawImages
+              alt={title}
               className="h-[400px] w-full object-cover"
               height={400}
-              src={`https://image.tmdb.org/t/p/original/${backdrop_path}`}
+              src={src}
               style={{
                 aspectRatio: '1200 / 400',
                 objectFit: 'cover',
               }}
               width={1200}
+              quality={75}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
             <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center text-white">
