@@ -21,7 +21,6 @@ export default function DrawImages({ src, alt, width, height, className, style, 
       className={className}
       style={style}
       quality={quality}
-      priority
     />
   );
 }
