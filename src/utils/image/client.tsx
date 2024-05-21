@@ -22,7 +22,6 @@ export default function DrawImages({ src, alt, width, height, className, style, 
       style={style}
       quality={quality}
       loading="lazy"
-      layout="responsive"
     />
   );
 }
