@@ -19,13 +19,13 @@ export default function DrawPoster({ src, title, index, backdrop_path }: CardPro
               alt={title}
               className="h-[400px] w-full object-cover"
               height={400}
-              src={src}
+              src={`https://image.tmdb.org/t/p/original/${backdrop_path}`}
               style={{
                 aspectRatio: '1200 / 400',
                 objectFit: 'cover',
               }}
               width={1200}
-              quality={75}
+              quality={70}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
             <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center text-white">
