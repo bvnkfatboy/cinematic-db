@@ -44,3 +44,14 @@ export const fetchPopular = async (mediaType: string) => {
     console.log('error', error);
   }
 };
+
+export const fetchSearch = async (mediaType: string, query: string) => {
+  try {
+    const { data } = await DataService.get(
+      `https://api.themoviedb.org/3/search/${mediaType}?query=${query}&language=en-US&include_adult=true`,
+    );
+    return data;
+  } catch (error) {
+    console.log('error', error);
+  }
+};

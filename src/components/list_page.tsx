@@ -2,12 +2,14 @@
 
 import dayjs from 'dayjs';
 import { motion } from 'framer-motion';
-import React, { useEffect, useState } from 'react';
+import { Search } from 'lucide-react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import DrawCards from '@/components/shares/card';
 import Detail from '@/components/shares/detail';
 import { SkeletonCard } from '@/components/skeleton/card';
 import { Drawer, DrawerContent } from '@/components/ui/drawer';
+import { Input } from '@/components/ui/input';
 import {
   Pagination,
   PaginationContent,
@@ -20,7 +22,7 @@ import {
 
 import '@/config/dayjs.config';
 import { fade } from '@/lib/config';
-import { fetchMovie } from '@/utils/action';
+import { fetchMovie, fetchSearch } from '@/utils/action';
 
 dayjs.locale('th');
 
@@ -36,7 +38,7 @@ function ListPage({ type }: Props) {
   const [open, setOpen] = useState(false);
   const [selectMovieId, setSelectMovieId] = useState<number>();
   const [mediaType, setMediaType] = useState<string>();
-
+  const [inputValue, setInputValue] = useState('');
   const [totalPages, setTotalPages] = useState(1);
   const pageLimit = 5;
   useEffect(() => {
@@ -69,6 +71,31 @@ function ListPage({ type }: Props) {
   const startPage = Math.floor((page - 1) / pageLimit) * pageLimit + 1;
   const endPage = startPage + pageLimit - 1;
 
+  const searchHandle = useCallback(
+    async (searchValue: string) => {
+      setLoading(true);
+      let data;
+      if (type === 'tv') {
+        data = await fetchSearch('tv', searchValue);
+      } else if (type === 'movie') {
+        data = await fetchSearch('movie', searchValue);
+      }
+      setMovies(data.results);
+      setLoading(false);
+    },
+    [type],
+  );
+
+  useEffect(() => {
+    if (!inputValue) {
+      return;
+    }
+    const timer = setTimeout(async () => {
+      await searchHandle(inputValue);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [inputValue]);
+
   if (loading) {
     return (
       <>
@@ -83,6 +110,20 @@ function ListPage({ type }: Props) {
 
   return (
     <>
+      <div className="flex justify-center">
+        <div className="relative w-full max-w-[500px]">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+            <Search className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+          </div>
+          <Input
+            className="block w-full rounded-lg bg-[#f5f5f5] p-4 pl-10  text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 "
+            placeholder="Search..."
+            type="search"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+        </div>
+      </div>
       <h1 className="font-bol m-5 mb-[30px] text-center text-3xl md:text-4xl lg:text-5xl">
         {type === 'tv' ? 'ทีวีซีรี่ย์' : 'ภาพยนตร์'} ได้รับความนิยม
       </h1>
